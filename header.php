@@ -58,7 +58,7 @@
 				?>
 			</nav><!-- #site-navigation -->
 			<span>
-				<a href="#"><img src="<?php echo wp_get_upload_dir()['baseurl'].'/2022/10/user-1.svg'; ?>"></a>
+				<a href="<?php echo get_site_url() ?>/acceso"><img src="<?php echo wp_get_upload_dir()['baseurl'].'/2022/10/user-1.svg'; ?>"></a>
 			</span>
 		</div>
 	</header><!-- #masthead -->

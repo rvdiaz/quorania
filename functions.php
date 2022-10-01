@@ -275,7 +275,7 @@ function pisos_page_filter_result($atts){
 	if ( $query->have_posts() ): ?>
 	 <?php $count=1; ?>
 	 <?php ob_start(); ?>	  	
-<?php	while ( $query->have_posts() ): $query->the_post();
+	<?php	while ( $query->have_posts() ): $query->the_post();
 				$terms = array();
 				foreach (get_the_terms( get_the_ID(), 'building' ) as $term) {
 					array_push($terms, $term->name);

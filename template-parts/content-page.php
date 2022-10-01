@@ -116,6 +116,42 @@
 
 	<?php } ?>
 
+	
+<!------------- Acceso --------------------------->
+	
+<?php if( get_field('template') == 'acceso' ){ ?>
+<div class="acceso">
+	<div class='wrapperLogin'>
+		<div class="logo-title-container">
+			<div class="logo-login">
+				<?php if(get_field('logo_login')) {?>
+					<img src="<?php echo get_field('logo_login') ?>" alt="">
+				<?php } ?>
+			</div>
+			<div class="title-login">
+				<?php if(get_field('title_login')) {?>
+					<span> <?php echo get_field('title_login') ?></span>
+					<hr class="title-login-separator"/>
+				<?php } ?>
+			</div>
+		</div>
+        <form class='formLogin'>
+            <div class='inputGroup'>
+                <label>Login</label>
+                <input class="inputForm" type="text" id="usernameForm" name='user'/>
+            </div>
+            <div class='inputGroup'>
+                <label>Contraseña</label>
+                <input class="inputForm" type="password" id="passwordForm" name='password'/>
+            </div>
+            <div class="wrapperbutton">
+                <button class="submitButton" type='submit'>Entrar</button>
+            </div>
+        </form>
+    </div>
+</div>
+<?php } ?>
+
 
 <!------------- Pisos  --------------------------->
 
