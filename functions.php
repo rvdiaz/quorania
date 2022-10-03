@@ -176,42 +176,24 @@ require get_template_directory() . '/inc/post-types.php';
  * Custom login form.
  */
 
-function quorania_microsite_login_page() {
-	
-	$args = array(
-	
-		'echo'           => true,
-		'remember'       => true,
-		'form_id'        => 'loginform',
-		'id_username'    => 'user_login',
-		'id_password'    => 'user_pass',
-		'id_submit'      => 'wp-submit',
-		'label_username' => __( 'Login', 'quorania-microsite' ),
-		'label_password' => __( 'Contraseña', 'quorania-microsite' ),
-		'label_log_in'   => __( 'Entrar', 'quorania-microsite' ),
-		'value_username' => '',
-		'remember' 		 => false
-		
-	);
-	
-	wp_login_form($args);
-	
+add_filter('login_redirect', 'my_login_redirect', 10, 3);
+function my_login_redirect($redirect_to, $requested_redirect_to, $user) {
+    if (is_wp_error($user)) {
+        $error_types = array_keys($user->errors);
+		if (is_array($error_types) && !empty($error_types)) {
+            $error_type = $error_types[0];
+        }
+		$referrer = $_SERVER['HTTP_REFERER']; 
+		if ( !empty( $referrer ) && !strstr( $referrer,'wp-login' ) && !strstr( $referrer,'wp-admin' ) ){ 
+			$referrer = esc_url( remove_query_arg( 'login', $referrer ) );
+			wp_redirect( $referrer . "?login=failed&reason=" . $error_type );
+        	exit;
+		}
+    } else {
+        return home_url();
+    }
 }
-add_shortcode('quorania-microsite-login-page', 'quorania_microsite_login_page');
 
-function quorania_microsite_redirect_after_login_fail( $username ) {
-
-	$referrer = $_SERVER['HTTP_REFERER']; 
-	if ( !empty( $referrer ) && !strstr( $referrer,'wp-login' ) && !strstr( $referrer,'wp-admin' ) ) {
-		
-		$referrer = esc_url( remove_query_arg( 'login', $referrer ) );
-		wp_redirect( $referrer . '?login=failed' );
-		exit;
-	
-	}
-
-}
-add_action( 'wp_login_failed', 'quorania_microsite_redirect_after_login_fail' );
 /*
 function quorania_microsite_redirect_after_login_fail_blank( $user, $username, $password ) {
 	

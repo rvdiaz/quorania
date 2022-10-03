@@ -119,13 +119,29 @@
 	
 <!------------- Acceso --------------------------->
 	
-<?php if( get_field('template') == 'acceso' ){ ?>
+<?php if( get_field('template') == 'acceso' ){ 
+	$args = array(
+	
+		'echo'           => true,
+		'remember'       => true,
+		'form_id'        => 'loginform',
+		'id_username'    => 'user_login',
+		'id_password'    => 'user_pass',
+		'id_submit'      => 'wp-submit',
+		'label_username' => __( 'Login', 'quorania-microsite' ),
+		'label_password' => __( 'Contraseña', 'quorania-microsite' ),
+		'label_log_in'   => __( 'Entrar', 'quorania-microsite' ),
+		'value_username' => '',
+		'remember' 		 => false
+		
+	);
+?>
 <div class="acceso">
 	<div class='wrapperLogin'>
 		<div class="logo-title-container">
 			<div class="logo-login">
 				<?php if(get_field('logo_login')) {?>
-					<img src="<?php echo get_field('logo_login') ?>" alt="">
+					<img src="<?php echo get_field('logo_login') ?>" alt="quorania">
 				<?php } ?>
 			</div>
 			<div class="title-login">
@@ -135,19 +151,31 @@
 				<?php } ?>
 			</div>
 		</div>
-        <form class='formLogin'>
-            <div class='inputGroup'>
-                <label>Login</label>
-                <input class="inputForm" type="text" id="usernameForm" name='user'/>
-            </div>
-            <div class='inputGroup'>
-                <label>Contraseña</label>
-                <input class="inputForm" type="password" id="passwordForm" name='password'/>
-            </div>
-            <div class="wrapperbutton">
-                <button class="submitButton" type='submit'>Entrar</button>
-            </div>
-        </form>
+		<?php wp_login_form($args);?>
+		<p class="errorMessage">
+			<?php
+				if (isset($_GET['reason'])){
+					$aux=$_GET['reason'];
+				}
+				switch ($aux) {
+					case 'empty_username':
+						echo "The username field is empty";
+						break;
+					case 'empty_password':
+						echo "The password field is empty.";
+						break;
+					case 'incorrect_password':
+						echo "The password you entered for the username is incorrect.";
+						break;
+					case 'invalid_username':
+						echo "The username is not registered on this site. If you are unsure of your username, try your email address instead.";
+						break;
+					default:
+						echo "";
+						break;
+				}
+			?> 
+		</p>
     </div>
 </div>
 <?php } ?>
