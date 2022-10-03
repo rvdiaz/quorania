@@ -179,6 +179,7 @@ require get_template_directory() . '/inc/post-types.php';
 add_filter('login_redirect', 'my_login_redirect', 10, 3);
 function my_login_redirect($redirect_to, $requested_redirect_to, $user) {
 	$referrer = $_SERVER['HTTP_REFERER']; 
+	$roles = $user->roles;
     if (is_wp_error($user)) {
         $error_types = array_keys($user->errors);
 		if (is_array($error_types) && !empty($error_types)) {
@@ -190,7 +191,8 @@ function my_login_redirect($redirect_to, $requested_redirect_to, $user) {
         	exit;
 		}
     } else {
-		if ( !empty( $referrer ) && !strstr( $referrer,'wp-login' ) && !strstr( $referrer,'wp-admin' ) )
+
+		if ( !empty( $referrer ) && !strstr( $referrer,'wp-login' ) && !strstr( $referrer,'wp-admin' ) && $roles[0]=='contributor')
         	return home_url();
 		else
 			return admin_url();
