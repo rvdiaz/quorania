@@ -178,19 +178,22 @@ require get_template_directory() . '/inc/post-types.php';
 
 add_filter('login_redirect', 'my_login_redirect', 10, 3);
 function my_login_redirect($redirect_to, $requested_redirect_to, $user) {
+	$referrer = $_SERVER['HTTP_REFERER']; 
     if (is_wp_error($user)) {
         $error_types = array_keys($user->errors);
 		if (is_array($error_types) && !empty($error_types)) {
             $error_type = $error_types[0];
         }
-		$referrer = $_SERVER['HTTP_REFERER']; 
 		if ( !empty( $referrer ) && !strstr( $referrer,'wp-login' ) && !strstr( $referrer,'wp-admin' ) ){ 
 			$referrer = esc_url( remove_query_arg( 'login', $referrer ) );
 			wp_redirect( $referrer . "?login=failed&reason=" . $error_type );
         	exit;
 		}
     } else {
-        return home_url();
+		if ( !empty( $referrer ) && !strstr( $referrer,'wp-login' ) && !strstr( $referrer,'wp-admin' ) )
+        	return home_url();
+		else
+			return admin_url();
     }
 }
 
