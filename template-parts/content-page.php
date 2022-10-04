@@ -126,19 +126,19 @@
 						$row_class = ($count%2 == 0) ? 'pisos--list--container--body--row pair' : 'pisos--list--container--body--row odd'; 
 						?>
 						<div class="<?php echo $row_class ?> user_fields_vivienda">
-							<div class="pisos--list--container--body--row--cell"><?php echo get_field('parking_number',$idvivienda); ?> </div>
-					 		<div class="pisos--list--container--body--row--cell"><?php echo get_field('door',$idvivienda); ?> </div>
-					  		<div class="pisos--list--container--body--row--cell"><?php echo get_field('bedrooms_number',$idvivienda); ?> </div>
-					  		<div class="pisos--list--container--body--row--cell"><?php echo get_field('bathrooms_number',$idvivienda); ?> </div>
-					  		<div class="pisos--list--container--body--row--cell"><?php echo get_field('study_number',$idvivienda); ?> </div>
-					  		<div class="pisos--list--container--body--row--cell"><?php echo get_field('m2_builded',$idvivienda); ?> </div>
-					  		<div class="pisos--list--container--body--row--cell"><?php echo get_field('m2_useful',$idvivienda); ?> </div>
-					  		<div class="pisos--list--container--body--row--cell"><?php echo get_field('m2_balconies',$idvivienda); ?> </div>
-					  		<div class="pisos--list--container--body--row--cell"><?php echo get_field('m2_terraces',$idvivienda); ?> </div>
-					  		<div class="pisos--list--container--body--row--cell"><?php echo get_field('m2_garden',$idvivienda); ?> </div>
-					  		<div class="pisos--list--container--body--row--cell"><?php echo get_field('floor_price',$idvivienda); ?> </div>
+							<div class="pisos--list--container--body--row--cell"><?php if(get_field('parking_number',$idvivienda)) echo get_field('parking_number',$idvivienda); else echo '-';?></div>
+					 		<div class="pisos--list--container--body--row--cell"><?php if(get_field('door',$idvivienda)) echo get_field('door',$idvivienda); else echo '-';?></div>
+					  		<div class="pisos--list--container--body--row--cell"><?php if(get_field('bedrooms_number',$idvivienda)) echo get_field('bedrooms_number',$idvivienda); else echo '-';?></div>
+					  		<div class="pisos--list--container--body--row--cell"><?php if(get_field('bathrooms_number',$idvivienda)) echo get_field('bathrooms_number',$idvivienda); else echo '-'; ?></div>
+					  		<div class="pisos--list--container--body--row--cell"><?php if(get_field('study_number',$idvivienda)) echo get_field('study_number',$idvivienda); else echo '-';?></div>
+					  		<div class="pisos--list--container--body--row--cell"><?php if(get_field('m2_builded',$idvivienda)) echo get_field('m2_builded',$idvivienda); else echo '-';?></div>
+					  		<div class="pisos--list--container--body--row--cell"><?php if(get_field('m2_useful',$idvivienda)) echo get_field('m2_useful',$idvivienda); else echo '-';?></div>
+					  		<div class="pisos--list--container--body--row--cell"><?php if(get_field('m2_balconies',$idvivienda)) echo get_field('m2_balconies',$idvivienda); else echo '-';?></div>
+					  		<div class="pisos--list--container--body--row--cell"><?php if(get_field('m2_terraces',$idvivienda)) echo get_field('m2_terraces',$idvivienda); else echo '-';?></div>
+					  		<div class="pisos--list--container--body--row--cell"><?php if(get_field('m2_garden',$idvivienda)) echo get_field('m2_garden',$idvivienda); echo '-';?></div>
+					  		<div class="pisos--list--container--body--row--cell"><?php if(get_field('floor_price',$idvivienda)) echo get_field('floor_price',$idvivienda); else echo '-';?></div>
 							<div class="pisos--list--container--body--row--cell">
-							  <a href="<?php echo get_field('floor_plane',$idvivienda); ?>" download><img src="<?php echo wp_get_upload_dir()['baseurl'].'/2022/10/Vector-1-overlay.png'; ?>"></a>
+							  <a href="<?php echo get_field('floor_plane',$idvivienda); ?>" download><img src="<?php echo wp_get_upload_dir()['baseurl'].'/2022/09/file-download-1.svg';?>"></a>
 							</div>
 						</div>
 						<?php
@@ -178,7 +178,7 @@
 							 <div class="pisos--list--container--body--row--cell"><?php if(get_field('escalera',$idparqueos)) echo get_field('escalera',$idparqueos); else echo '-'?> </div>
 					  		<div class="pisos--list--container--body--row--cell"><?php if(get_field('parking_price',$idparqueos)) echo get_field('parking_price',$idparqueos); else echo '-'?> </div>
 					  		<div class="pisos--list--container--body--row--cell">
-							  <a href="<?php echo get_field('parking_plane',$idparqueos); ?>" download><img src="<?php echo wp_get_upload_dir()['baseurl'].'/2022/10/Vector-1-overlay.png'; ?>"></a>
+							  <a href="<?php echo get_field('parking_plane',$idparqueos); ?>" download><img src="<?php echo wp_get_upload_dir()['baseurl'].'/2022/09/file-download-1.svg'; ?>"></a>
 							 </div>
 						</div>
 						<?php
@@ -198,11 +198,11 @@
 		</div>
 		<?php if($lista_contratos){ ?> 
 		<div class="accordion-user-wrapper">
-			<button class="accordion-user-administration">Contrato <img src="<?php echo wp_get_upload_dir()['baseurl'].'/2022/10/Vector-3.png'; ?>"></button>
+			<button class="accordion-user-administration">Contrato <img src="<?php echo wp_get_upload_dir()['baseurl'].'/2022/10/Accordion.png'; ?>"></button>
 			<div class="panel">
 				<?php foreach ($lista_contratos as $contratos) {?>
 					<a href="<?php echo $contratos['contratos']; ?>" download>
-						<img src="<?php echo wp_get_upload_dir()['baseurl'].'/2022/10/Vector-1-overlay.png'; ?>">
+						<img src="<?php echo wp_get_upload_dir()['baseurl'].'/2022/09/file-download-1.svg'; ?>">
 						<span><?php echo $contratos['titulo_contrato']?></span></a>
 				<?php } ?>
 			</div>
@@ -210,11 +210,11 @@
 		<?php } ?>
 		<?php if($lista_pagos){ ?> 
 		<div class="accordion-user-wrapper">
-			<button class="accordion-user-administration">Pagos <img src="<?php echo wp_get_upload_dir()['baseurl'].'/2022/10/Vector-3.png'; ?>"></button>
+			<button class="accordion-user-administration">Pagos <img src="<?php echo wp_get_upload_dir()['baseurl'].'/2022/10/Accordion.png'; ?>"></button>
 			<div class="panel">
 				<?php foreach ($lista_pagos as $pagos) {?>
 					<a href="<?php echo $pagos['pagos']; ?>" download>
-						<img src="<?php echo wp_get_upload_dir()['baseurl'].'/2022/10/Vector-1-overlay.png'; ?>">
+						<img src="<?php echo wp_get_upload_dir()['baseurl'].'/2022/09/file-download-1.svg'; ?>">
 						<span><?php echo $pagos['titulo_pago']?></span></a>
 				<?php } ?>
 			</div>
@@ -222,11 +222,11 @@
 		<?php } ?>
 		<?php if($lista_pbc){ ?> 
 			<div class="accordion-user-wrapper">
-		<button class="accordion-user-administration">PBC <img src="<?php echo wp_get_upload_dir()['baseurl'].'/2022/10/Vector-3.png'; ?>"></button>
+		<button class="accordion-user-administration">PBC <img src="<?php echo wp_get_upload_dir()['baseurl'].'/2022/10/Accordion.png'; ?>"></button>
 			<div class="panel">
 				<?php foreach ($lista_pbc as $pbc) {?>
 					<a href="<?php echo $pbc['pbc']; ?>" download>
-						<img src="<?php echo wp_get_upload_dir()['baseurl'].'/2022/10/Vector-1-overlay.png'; ?>">
+						<img src="<?php echo wp_get_upload_dir()['baseurl'].'/2022/09/file-download-1.svg'; ?>">
 						<span><?php echo $pbc['titulo_pbc']?></span>
 					</a>
 				<?php } ?>
@@ -235,11 +235,11 @@
 		<?php } ?>
 		<?php if($lista_comunicados){ ?> 
 			<div class="accordion-user-wrapper">
-		<button class="accordion-user-administration">Comunicados <img src="<?php echo wp_get_upload_dir()['baseurl'].'/2022/10/Vector-3.png'; ?>"></button>
+		<button class="accordion-user-administration">Comunicados <img src="<?php echo wp_get_upload_dir()['baseurl'].'/2022/10/Accordion.png'; ?>"></button>
 			<div class="panel">
 				<?php foreach ($lista_comunicados as $comunicados) {?>
 				<a href="<?php echo $comunicados['comunicados']; ?>" download>
-					<img src="<?php echo wp_get_upload_dir()['baseurl'].'/2022/10/Vector-1-overlay.png'; ?>">
+					<img src="<?php echo wp_get_upload_dir()['baseurl'].'/2022/09/file-download-1.svg'; ?>">
 					<span><?php echo $comunicados['titulo_comunicado']?></span>
 				</a>
 			<?php } ?>
@@ -248,11 +248,11 @@
 		<?php } ?>
 		<?php if($lista_otros){ ?> 
 			<div class="accordion-user-wrapper">
-		<button class="accordion-user-administration">Otros <img src="<?php echo wp_get_upload_dir()['baseurl'].'/2022/10/Vector-3.png'; ?>"></button>
+		<button class="accordion-user-administration">Otros <img src="<?php echo wp_get_upload_dir()['baseurl'].'/2022/10/Accordion.png'; ?>"></button>
 			<div class="panel">
 				<?php foreach ($lista_otros as $otros) {?>
 					<a href="<?php echo $otros['otros']; ?>" download>
-						<img src="<?php echo wp_get_upload_dir()['baseurl'].'/2022/10/Vector-1-overlay.png'; ?>">
+						<img src="<?php echo wp_get_upload_dir()['baseurl'].'/2022/09/file-download-1.svg'; ?>">
 						<span><?php echo $otros['titulo_otros']?></span>
 					</a>
 				<?php } ?>
@@ -274,7 +274,7 @@
 				<div class="image-wrapper">
 					<img class="image-promo" src="<?php echo $promocion['foto_promocion'] ?>">
 					<a href="<?php echo $promocion['foto_promocion'] ?>" download>
-						<img src="<?php echo wp_get_upload_dir()['baseurl'].'/2022/10/Vector-1-overlay.png'; ?>">
+						<img src="<?php echo wp_get_upload_dir()['baseurl'].'/2022/09/file-download-1.svg'; ?>">
 					</a>
 				</div>
 				<?php } ?>
@@ -290,7 +290,7 @@
 			</div>
 			<?php if($contacto) {?>
 			<div class="contacto-container">
-				<a href="mailto:<?php echo $contacto ?>"><img src="<?php echo wp_get_upload_dir()['baseurl'].'/2022/10/Vector-overlay.png'; ?>"><?php echo $contacto ?></a>
+				<a href="mailto:<?php echo $contacto ?>"><img src="<?php echo wp_get_upload_dir()['baseurl'].'/2022/09/mail.svg'; ?>"><?php echo $contacto ?></a>
 			</div>
 			<?php } ?>
 		</div>
