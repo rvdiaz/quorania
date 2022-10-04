@@ -192,8 +192,8 @@ function my_login_redirect($redirect_to, $requested_redirect_to, $user) {
 		}
     } else {
 
-		if ( !empty( $referrer ) && !strstr( $referrer,'wp-login' ) && !strstr( $referrer,'wp-admin' ) && $roles[0]=='contributor')
-        	return home_url();
+		if ( !empty( $referrer ) && !strstr( $referrer,'wp-login' ) && !strstr( $referrer,'wp-admin' ) && !$roles[0]=='Administrator')
+        	return get_site_url().'/acceso';
 		else
 			return admin_url();
     }
@@ -222,6 +222,7 @@ function quorania_microsite_redirect_after_login_fail_blank( $user, $username, $
 	
 }
 add_filter( 'authenticate', 'quorania_microsite_redirect_after_login_fail_blank', 31, 3);*/
+
 
 add_shortcode( 'pisos_page_filter', 'pisos_page_filter_result' );
 
@@ -256,7 +257,6 @@ function pisos_page_filter_result($atts){
 		}
 		$args['meta_query'] = $meta_query;
 	}
-	
 	$query = new WP_Query($args);
 
 	if ( $query->have_posts() ): ?>

@@ -57,8 +57,22 @@
 				);
 				?>
 			</nav><!-- #site-navigation -->
-			<span>
-				<a href="<?php echo get_site_url() ?>/acceso"><img src="<?php echo wp_get_upload_dir()['baseurl'].'/2022/10/user-1.svg'; ?>"></a>
-			</span>
+			<?php 
+			if(isset($_REQUEST['logout'])){
+				wp_destroy_current_session();
+				wp_clear_auth_cookie();
+				wp_set_current_user( 0 );
+			}
+			$user=wp_get_current_user();
+			if(!$user->exists()){ 
+			?>
+			<a href="<?php echo get_site_url() ?>/acceso"><img src="<?php echo wp_get_upload_dir()['baseurl'].'/2022/10/user-1.svg'; ?>"></a>
+			<?php }else {?>
+				<form action="#">
+					<button class="logout_button" type="submit" name="logout">
+						<span>Hola,  <?php echo $user->user_login ?></span>
+						<img src="<?php echo wp_get_upload_dir()['baseurl'].'/2022/10/Ellipse-23.svg'; ?>"/></button>
+				</form>	
+			<?php } ?>
 		</div>
 	</header><!-- #masthead -->

@@ -12,6 +12,10 @@ body {
   padding: 0;
 }
 
+p {
+  margin: 0;
+}
+
 * {
   font-family: "Century Gothic";
 }
@@ -95,6 +99,7 @@ body {
 .entry-content .acceso .logo-login img {
   width: 230px;
   height: 72px;
+  margin-top: 130px;
 }
 
 .entry-content .acceso .title-login {
@@ -120,6 +125,10 @@ body {
   display: flex;
   align-items: center;
   flex-direction: column;
+}
+
+.entry-content .acceso .login-remember {
+  display: none;
 }
 
 .entry-content .acceso .login-username,
@@ -166,6 +175,25 @@ body {
   text-transform: uppercase;
 }
 
+.logout_button {
+  background-color: transparent;
+  outline: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.logout_button span {
+  font-family: "Century Gothic";
+  color: #000000;
+  background-color: transparent;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 19px;
+  margin-right: 16px;
+}
+
 @media only screen and (max-width: 1023px) {
   .entry-content .acceso .logo-login img {
     width: 158px;
@@ -173,6 +201,171 @@ body {
   }
   .entry-content .acceso .input {
     width: 290px;
+  }
+}
+/*  user administration styles */
+.administration-user {
+  margin-bottom: 121px;
+}
+
+.administration-user section {
+  padding: 16px 0;
+}
+
+.administration-user .user_fields_vivienda {
+  grid-template-columns: repeat(12, 1fr) !important;
+}
+
+.administration-user .user_fields_parquing {
+  grid-template-columns: repeat(5, 1fr) !important;
+}
+
+.administration-user .logoWrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.administration-user .logoWrapper img {
+  width: 230px;
+  height: 71px;
+  margin: 40px 0 18px 0;
+}
+
+.administration-user .pisos--list--title p {
+  font-family: "Century Gothic";
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 27px;
+  text-align: start;
+}
+
+.administration-user .title-login-separator {
+  width: 92px;
+  border: 1px solid #A9D52F;
+  margin-bottom: 19px;
+  margin-left: 0;
+}
+
+.administration-user .container-accordion {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+
+.administration-user .accordion-user-wrapper {
+  border: 1px solid #A9D52F;
+  margin-bottom: 19px;
+}
+
+.administration-user .accordion-user-administration {
+  background-color: transparent;
+  color: #000;
+  cursor: pointer;
+  font-family: "Century Gothic";
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 22px;
+  height: 47px;
+  width: 515px;
+  outline: none;
+  border: none;
+  transition: 0.4s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+}
+
+.administration-user .panel {
+  text-align: start;
+  padding: 0 18px;
+  display: none;
+  overflow: hidden;
+  margin-top: 34px;
+  margin-bottom: 24px;
+}
+
+.administration-user .panel a {
+  color: #000;
+  font-family: "Century Gothic";
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
+  text-decoration: none;
+  text-align: start;
+  display: flex;
+}
+
+.administration-user .panel span {
+  margin-left: 14px;
+}
+
+.administration-user .gallery-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: start;
+}
+
+.administration-user .image-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 20px;
+}
+
+.administration-user .image-wrapper a {
+  margin-top: 18px;
+}
+
+.administration-user .image-promo {
+  width: 133px;
+  height: 128px;
+}
+
+.administration-user .contacto-container {
+  text-align: start;
+}
+
+.administration-user .contacto-container a {
+  color: #000;
+  font-family: "Century Gothic";
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
+  text-decoration: none;
+  display: flex;
+}
+
+.administration-user .contacto-container img {
+  width: 20px;
+  object-fit: contain;
+  margin-right: 12px;
+}
+
+@media only screen and (max-width: 768px) {
+  .administration-user .user_fields_vivienda,
+.administration-user .user_fields_parquing {
+    grid-template-columns: 1fr !important;
+    width: 120px;
+    text-align: start;
+  }
+  .administration-user .pisos--list--container--body {
+    display: flex;
+  }
+  .administration-user .user-field-wrapper {
+    display: flex;
+    justify-content: space-between;
+    overflow: auto;
+  }
+  .administration-user .accordion-user-administration {
+    width: 300px;
+  }
+  .administration-user .gallery-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .administration-user .image-wrapper {
+    margin: 0;
   }
 }
 .entry-content .promocion {
@@ -367,6 +560,9 @@ body {
   font-weight: 700;
   color: #000;
 }
+.entry-content .pisos--list--container--heading--item {
+  padding: 8px 0;
+}
 .entry-content .pisos--list--container--body {
   font-size: 16px;
   line-height: 20px;
@@ -388,6 +584,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 8px 0;
 }
 .entry-content .pisos--list--container--body--row--cell a {
   display: flex;
