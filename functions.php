@@ -131,13 +131,28 @@ function quorania_microsite_scripts() {
 
 	wp_enqueue_script( 'quorania-microsite-navigation', get_template_directory_uri() . '/js/navigation.js', array(), _S_VERSION, true );
 	wp_enqueue_script( 'quorania-microsite-script', get_template_directory_uri() . '/js/custom.js', array('jquery'), _S_VERSION, true );
+	wp_enqueue_script( 'quorania-microsite-script-map', get_template_directory_uri() . '/js/map.js', array('jquery'), _S_VERSION, true );
 
 	wp_localize_script( 'quorania-microsite-script', 'ajax', array( 'url' => admin_url( 'admin-ajax.php' ) ) );
+	wp_localize_script( 'quorania-microsite-script-map', 'ajax', array( 'url' => admin_url( 'admin-ajax.php' ) ) );
 
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
 	}
 }
+
+if( function_exists('acf_add_options_page') ) {
+	
+	acf_add_options_page(array(
+		'page_title' 	=> 'Ubicaciones y Entornos',
+		'menu_title'	=> 'Ubicaciones y Entornos',
+		'menu_slug' 	=> 'theme-general-settings',
+		'capability'	=> 'edit_posts',
+		'icon_url' => 'dashicons-admin-site',
+		'redirect'		=> false
+	));
+}
+
 add_action( 'wp_enqueue_scripts', 'quorania_microsite_scripts' );
 
 /**
