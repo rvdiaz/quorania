@@ -717,7 +717,7 @@ p {
 				flex-basis: 100%;
 			}
 			hr {
-				color: #A9D52F;
+				color: $green-light;
 				width: 100px;
 				margin: -10px 0 30px 0;
 			}
@@ -741,8 +741,7 @@ p {
 						font-style: normal;
 						font-weight: 400;
                         font-size: 16px;
-                        line-height: 20px;
-                        color: #000000;
+                        line-height: 20px;                        
 						&.bold {
 							font-weight: 700;
 						}
