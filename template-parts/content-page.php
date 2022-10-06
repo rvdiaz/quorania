@@ -39,6 +39,11 @@
 
 
 
+<!------------- Contacto --------------------------->
+	
+<?php include('templates/contacto.php'); ?>
+
+
 <!------------- Pisos  --------------------------->
 
 <?php include('templates/pisos.php'); ?>
