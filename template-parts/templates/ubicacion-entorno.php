@@ -24,8 +24,8 @@
 				?>
 			<button id="button-<?php echo $index?>" class="btn-map">
 				<span class="image-map-button">
-					<img class="img-btn-op" src="<?php echo wp_get_upload_dir()['baseurl'].'/2022/10/Vector.png';?>">
-					<img class="img-btn-cl" src="<?php echo wp_get_upload_dir()['baseurl'].'/2022/10/Vector-1.png';?>">
+					<img class="img-btn-op" src="<?php echo wp_get_upload_dir()['baseurl'].'/2022/09/eye-off.svg';?>">
+					<img class="img-btn-cl" src="<?php echo wp_get_upload_dir()['baseurl'].'/2022/09/eye.svg';?>">
 				</span>
 				<span class="title--map-btn">
 					<?php echo $location['titulo_locacion'];?>

@@ -124,14 +124,13 @@
 			    flex-wrap: nowrap;
 			    justify-content: space-between;
 			    align-items: center;
-			    margin: auto;
+			    margin: 13px auto;
 	    		&--logo{
 	    			margin-left: 20px;
 	    		}
 	    		&--items{
 	    			display: flex;
 	    			justify-content: center;
-	    			align-items: center;
 	    			align-content: center;
 	    			column-gap: 45px;
 	    			&--item{
@@ -148,8 +147,69 @@
 	    					column-gap: 12px;
 	    					row-gap: 9px;
 	    					flex-wrap: wrap;
+							.input-range-wrapper{
+								position: relative;
+								display: flex;
+								align-items: center;
+								margin-right: 1px solid #D9D9D9;
+								height: 10px;
+								#price-range-data-out {
+									position: absolute;
+									left: 30%;
+									background-image: url(http://microsite.informagedevelop.com/wp-content/uploads/2022/10/Rectangle-10.png);
+									background-size: 100% 100%;
+									height: 30px;
+									min-width: 50px;
+									background-repeat: no-repeat;
+									top: -38px;
+									color: #000;
+									text-align: center;
+									display: none;
+									padding-top: 5px;
+								}
+								#surface-range-data-out{
+									position: absolute;
+									left: 30%;
+									background-image: url(http://microsite.informagedevelop.com/wp-content/uploads/2022/10/Rectangle-10.png);
+									background-size: 100% 100%;
+									height: 30px;
+									min-width: 50px;
+									background-repeat: no-repeat;
+									top: -38px;
+									color: #000;
+									text-align: center;
+									display: none;
+									padding-top: 5px;
+								}
+								input[type=range]{
+									-webkit-appearance: none;
+									height: 2px;
+								}
+								input[type=range]::-webkit-slider-thumb{
+									height: 12px;
+									width: 12px;
+									border-radius: 50%;
+									background: $green-light;
+									cursor: pointer;
+									-webkit-appearance: none;
+									margin-top: -1px;
+									position: relative;
+								}
+							}
+							&-bedrooms {
+								display: grid !important;
+  								grid-template-columns: repeat(3,1fr);
+  								grid-gap: 9px !important;
+							}
+							&-buildings {
+								display: grid !important;
+  								grid-template-columns: repeat(3,1fr);
+  								grid-gap: 9px !important;
+							}
+							.select{
+								background-color: $green-light;
+							}
 	    					span{
-	    						flex-basis: 30%;
 	    						width: 26px;
 	    						height: 28px;
 	    						background-color: #d9d9d9;
@@ -157,16 +217,32 @@
 	    						align-items: center;
 							    display: flex;
 							    justify-content: center;
-	    						&.selected{
-	    							background-color: $green-light;
-	    						}
+								font-size: 16px;
+								line-height: 20px;
+								font-weight: 400;
+								cursor: pointer;
 	    					}
 	    				}
 	    			}
 	    		}
-	    		&--button{
+	    		.restore-filters-button{
 	    			margin-right: 32px;
+					height: 33px;
+					width: 144px;
+					border: 1px solid $green-light;
+					cursor: pointer;
+					background-color: transparent;
+					outline: none;
+					color: #fff;
+					font-weight: 400;
+					font-size: 12px;
+					line-height: 15px;
+					text-transform: uppercase;
 	    		}
+				.restore-filers-button span{
+					color: $green-light;
+					font-size: 14px;
+				}
     		}
 		}
 		&--list{
@@ -217,6 +293,11 @@
 					}
 				}
 			}
+		}
+		.not-results-filter {
+			margin-top: 20px;
+			font-size: 18px;
+			font-weight: 700;
 		}
 	}
 	.quorania{

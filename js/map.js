@@ -1,14 +1,11 @@
 
 function initMap() {
+    if(document.getElementById("map")){
     const latitud= parseFloat(jQuery('#latitud-centro').val());
     const longitud= parseFloat(jQuery('#longitud-centro').val());
     map = new google.maps.Map(document.getElementById("map"), {
       center: {lat:latitud,lng:longitud},
       zoom: 14,
-    });
-    const markerCenter= new google.maps.Marker({
-    position: {lat:latitud,lng:longitud},
-    map: map
     });
 
     let markerLocations=[];
@@ -63,8 +60,9 @@ function initMap() {
             }
             btn.toggleClass('click');
         })
+    }
 }   
+
 }
 window.initMap = initMap;
-
 

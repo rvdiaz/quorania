@@ -6,16 +6,31 @@ $args = array(
           'post_type' => 'floor',                
           'post_status' => 'publish'
           );
+          
 $query = new WP_Query($args);
-
 if ( $query->have_posts() ): 
-    $buildings = $bedrooms = $surface = $price = array();		    	
+    $buildings = $bedrooms = $surface = $price = array();	 
+    $maxsurface=$maxprice=0;	
+    $minsurface=$minprice=100000;
       while ( $query->have_posts() ): $query->the_post();
+            if(get_the_terms( get_the_ID(), 'building' ))
            $buildings = array_merge($buildings, get_the_terms( get_the_ID(), 'building' ));
            $bedrooms[ get_field('bedrooms_number',get_the_ID()) ] = get_field('bedrooms_number',get_the_ID());
            $surface[ get_field('m2_builded',get_the_ID()) ] = get_field('m2_builded',get_the_ID());
-           $price[ get_field('floor_price',get_the_ID()) ] = get_field('floor_price',get_the_ID()); 	
+           $price[ get_field('floor_price',get_the_ID()) ] = get_field('floor_price',get_the_ID());  
+           $surfaceCurrent= get_field('m2_builded',get_the_ID());
+           $priceCurrent = get_field('floor_price',get_the_ID());
+            if($surfaceCurrent<$minsurface)
+                $minsurface=$surfaceCurrent;
 
+            if($surfaceCurrent>$maxsurface)
+                $maxsurface=$surfaceCurrent;
+
+            if($priceCurrent<$minprice)
+                $minprice=$priceCurrent;
+
+            if($priceCurrent>$maxprice)
+                $maxprice=$priceCurrent;
       endwhile;
       $temp = array();
       foreach ($buildings as $b) {
@@ -27,30 +42,30 @@ if ( $query->have_posts() ):
       asort($surface);
       asort($price);
 ?>	
-
 <div class="pisos">
     <section class="pisos--filters">
         <div class="pisos--filters--container">
             <div class="pisos--filters--container--logo"><img src="<?php echo get_header_image(); ?>"></div>
                 <div class="pisos--filters--container--items">
                     <div class="pisos--filters--container--items--item">
-                        <?php if( sizeof($buildings) > 1 ): ?>
+                        <?php if( sizeof($buildings)>0 ): ?>
                             <div class="pisos--filters--container--items--item--heading"><?php _e('Edificios','quorania-microsite'); ?></div>
-                            <div class="pisos--filters--container--items--item--content">
+                            <div class="pisos--filters--container--items--item--content pisos--filters--container--items--item--content-buildings">
                                 <?php 
-                                      foreach($buildings as $b): ?>
-                                          <span class="" data-building="<?php echo$b; ?>"><?php echo $b; ?></span>
+                                    foreach($buildings as $b): ?>
+                                        <span onclick="SelectFilter(event)" class="" data-building="<?php echo$b; ?>"><?php echo $b; ?></span>
                                 <?php endforeach; ?>
                             </div>
                         <?php endif; ?>
                     </div>
                     <div class="pisos--filters--container--items--item">
-                        <?php if( sizeof($bedrooms) > 1 ): ?>
+                        <?php if( sizeof($bedrooms) > 0 ): ?>
                             <div class="pisos--filters--container--items--item--heading"><?php _e('Dormitorios','quorania-microsite'); ?></div>
-                            <div class="pisos--filters--container--items--item--content">
+                            <div class="pisos--filters--container--items--item--content pisos--filters--container--items--item--content-bedrooms">
                                 <?php 
-                                      foreach($bedrooms as $b): ?>
-                                          <span class="" data-bedroom="<?php echo$b; ?>"><?php echo $b; ?></span>
+                                      foreach($bedrooms as $b): 
+                                      ?>
+                                          <span onclick="SelectFilter(event)" class="bedrooms" data-bedroom="<?php echo $b; ?>"><?php echo $b; ?></span>
                                 <?php endforeach; ?>
                             </div>
                         <?php endif; ?>
@@ -58,17 +73,23 @@ if ( $query->have_posts() ):
                     <div class="pisos--filters--container--items--item">
                         <div class="pisos--filters--container--items--item--heading"><?php _e('Superficie','quorania-microsite'); ?></div>
                         <div class="pisos--filters--container--items--item--content">
-                            <input type="range" name="surface_range" min="<?php echo reset($surface); ?>" max="200" step="10">
+                            <div class="input-range-wrapper">
+                                <input type="range" id="surface-range-data" value="0" name="surface_range" min="<?php echo $minsurface ?>" max="<?php echo $maxsurface ?>" step="">
+                                <output id="surface-range-data-out" name="outvol" for="surface-range-data"></output>
+                            </div>
                         </div>
                     </div>							
                     <div class="pisos--filters--container--items--item">
                         <div class="pisos--filters--container--items--item--heading"><?php _e('Precio','quorania-microsite'); ?></div>
                         <div class="pisos--filters--container--items--item--content">
-                            <input type="range" name="price_range" min="<?php echo reset($price); ?>" max="1000000" step="1000">
+                            <div class="input-range-wrapper">
+                                <input type="range" id="price-range-data" value="0" name="price_range" min="<?php echo $minprice; ?>" max="<?php echo $maxprice; ?>" step="">
+                                <output id="price-range-data-out" name="outvol" for="price-range-data"></output>
+                            </div>
                         </div>
                     </div>						
                 </div>
-            <div class="pisos--filters--container--button"><button></button></div>
+            <div class="pisos--filters--container--button"><button class="restore-filters-button"><span>X</span> Restaurar Filtros</button></div>
         </div>					
     </section>
     <section class="pisos--list" id="pisos_list">
@@ -93,6 +114,9 @@ if ( $query->have_posts() ):
             </div>
         </div>
     </section>
+
+
+    
         
 </div>		
 <?php endif;  ?>

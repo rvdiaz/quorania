@@ -130,11 +130,15 @@ function quorania_microsite_scripts() {
 	wp_style_add_data( 'quorania-microsite-style', 'rtl', 'replace' );
 
 	wp_enqueue_script( 'quorania-microsite-navigation', get_template_directory_uri() . '/js/navigation.js', array(), _S_VERSION, true );
-	wp_enqueue_script( 'quorania-microsite-script', get_template_directory_uri() . '/js/custom.js', array('jquery'), _S_VERSION, true );
+	wp_enqueue_script( 'quorania-microsite-script', get_template_directory_uri() . '/js/user-administration.js', array('jquery'), _S_VERSION, true );
 	wp_enqueue_script( 'quorania-microsite-script-map', get_template_directory_uri() . '/js/map.js', array('jquery'), _S_VERSION, true );
+	wp_enqueue_script( 'quorania-microsite-script-pisos-filter', get_template_directory_uri() . '/js/pisos-filter.js', array('jquery'), _S_VERSION, true );
+	wp_enqueue_script( 'quorania-microsite-script-parking-filter', get_template_directory_uri() . '/js/parking-filter.js', array('jquery'), _S_VERSION, true );
 
 	wp_localize_script( 'quorania-microsite-script', 'ajax', array( 'url' => admin_url( 'admin-ajax.php' ) ) );
 	wp_localize_script( 'quorania-microsite-script-map', 'ajax', array( 'url' => admin_url( 'admin-ajax.php' ) ) );
+	wp_localize_script( 'quorania-microsite-script-pisos-filter', 'ajax', array( 'url' => admin_url( 'admin-ajax.php' ) ) );
+	wp_localize_script( 'quorania-microsite-script-parking-filter', 'ajax', array( 'url' => admin_url( 'admin-ajax.php' ) ) );
 
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
@@ -214,31 +218,6 @@ function my_login_redirect($redirect_to, $requested_redirect_to, $user) {
     }
 }
 
-/*
-function quorania_microsite_redirect_after_login_fail_blank( $user, $username, $password ) {
-	
-	if ( is_wp_error( $user ) && isset( $_SERVER[ 'HTTP_REFERER' ] ) && !strpos( $_SERVER[ 'HTTP_REFERER' ], 'wp-admin' ) && !strpos( $_SERVER[ 'HTTP_REFERER' ], 'wp-login.php' ) ) {
-		
-		$referrer = $_SERVER[ 'HTTP_REFERER' ];
-		foreach ( $user->errors as $key => $error ) {
-
-			if ( in_array( $key, array( 'empty_password', 'empty_username') ) ) {
-				
-				unset( $user->errors[ $key ] );
-				$user->errors[ 'custom_'.$key ] = $error;
-			
-			}
-		
-		}
-		
-	}
-
-	return $user;
-	
-}
-add_filter( 'authenticate', 'quorania_microsite_redirect_after_login_fail_blank', 31, 3);*/
-
-
 add_shortcode( 'pisos_page_filter', 'pisos_page_filter_result' );
 
 function pisos_page_filter_result($atts){
@@ -314,13 +293,128 @@ function pisos_page_filter_result($atts){
 	return ob_get_clean();
 }
 
+add_shortcode( 'parking_page_filter', 'parking_page_filter_result' );
+function parking_page_filter_result($atts){
+
+	$args = array(
+		   		'post_type' => 'parking_boxroom',                
+		   		'post_status' => 'publish',
+		   	);
+	$query = new WP_Query($args);
+
+	if ( $query->have_posts() ): ?>
+	 <?php $count=1; ?> 	
+	<?php	while ( $query->have_posts() ): $query->the_post();
+				$terms = array();
+				foreach (get_the_terms( get_the_ID(), 'building' ) as $term) {
+					array_push($terms, $term->name);
+				}
+			    if( !isset($atts['buildings']) || ( isset($atts['buildings']) && in_array($atts['buildings'], $terms) ) ): ?>
+			    	<?php $row_class = ($count%2 == 0) ? 'pisos--list--container--body--row pair' : 'pisos--list--container--body--row odd'; ?>
+			    	<?php 
+			    		  if(get_field('parking_reserved') == true):
+			    		    $row_class = $row_class.'parking_reserved';
+			    	 	  endif; 
+			    	 ?>
+			        <div class="<?php echo $row_class; ?> row-parking">
+			         	<?php $building_to_show = sizeof( get_the_terms( get_the_ID(), 'building' ) ) > 0 ? get_the_terms( get_the_ID(), 'building' )[0]->name : ''; ?>   		
+					 	<div class="pisos--list--container--body--row--cell"><?php echo get_the_title(); ?> </div>  
+					 	<div class="pisos--list--container--body--row--cell"><?php echo get_field('floor_number'); ?> </div>
+						<div class="pisos--list--container--body--row--cell"><?php echo $building_to_show; ?> </div>
+					  	<div class="pisos--list--container--body--row--cell"><?php echo get_field('parking_price'); ?> </div>
+					  	<div class="pisos--list--container--body--row--cell"><?php echo get_field('escalera'); ?> </div>
+					  	<div class="pisos--list--container--body--row--cell"><a href="<?php echo get_field('parking_plane'); ?>"><img src="<?php echo wp_get_upload_dir()['url'].'/file-download-1.svg'; ?>"></a></div>
+				    </div>
+		  <?php $count++; endif;
+		endwhile; 
+		wp_reset_postdata(); ?>
+	  <?php	
+	endif;	
+
+	return ob_get_clean();
+}
 add_action('wp_ajax_nopriv_quorania_filter', 'quorania_pisos_filter');
 add_action('wp_ajax_quorania_filter', 'quorania_pisos_filter');
 
+
 function quorania_pisos_filter(){
-	$buiding['building'] = $_POST['building'];
+	$args = array(
+		'post_type' => 'floor',                
+		'post_status' => 'publish',
+	);
+	$query = new WP_Query($args);
+	$html='';
+	$buildingsSelected=[];
+	$bedroomsSelected=[];
+	$dataSend= $_POST['dataSend'];
+
+	if($dataSend['buildings'])
+		$buildingsSelected=$dataSend['buildings'];
+	if($dataSend['bedrooms'])
+		$bedroomsSelected=$dataSend['bedrooms'];
+
+	if ( $query->have_posts() ){
+		$count=1;
+		while ( $query->have_posts() ){
+			$query->the_post();
+
+			$building=get_the_terms( get_the_ID(), 'building' )[0]->name;
+			$bedroom=get_field('bedrooms_number');
+			$currentPrice=get_field("floor_price");
+			$currentSurface=get_field("m2_builded");
+			if(count($buildingsSelected)==0 && count($bedroomsSelected)==0 && $dataSend['price']==$dataSend['minPrice'] && $dataSend['surface']==$dataSend['minSurface']){
+				$row_class = ($count%2 == 0) ? 'pisos--list--container--body--row pair' : 'pisos--list--container--body--row odd';
+			    if(get_field('floor_reserved') == true)
+			    	$row_class = $row_class.' floor__reserved';
+
+			$html.='<div class="'.$row_class.'">	
+				<div class="pisos--list--container--body--row--cell">'. $building.'</div>
+				<div class="pisos--list--container--body--row--cell">'. get_field("parking_number").'</div>
+				<div class="pisos--list--container--body--row--cell">'. get_field("door").'</div>
+				<div class="pisos--list--container--body--row--cell">'. $bedroom.'</div>
+				<div class="pisos--list--container--body--row--cell">'. get_field("bathrooms_number").'</div>
+				<div class="pisos--list--container--body--row--cell">'. get_field("study_number").'</div>
+				<div class="pisos--list--container--body--row--cell">'. $currentSurface.'</div>
+				<div class="pisos--list--container--body--row--cell">'. get_field("m2_useful").'</div>
+				<div class="pisos--list--container--body--row--cell">'. get_field("m2_balconies").'</div>
+				<div class="pisos--list--container--body--row--cell">'. get_field("m2_terraces").'</div>
+				<div class="pisos--list--container--body--row--cell">'. get_field("m2_garden").'</div>
+				<div class="pisos--list--container--body--row--cell">'. $currentPrice.'</div>
+				<div class="pisos--list--container--body--row--cell">'. get_field("bedrooms_number").'</div>
+			</div>';
+			$count++;
+		}
+		elseif((in_array($bedroom,$bedroomsSelected) || count($bedroomsSelected)==0) && (in_array($building,$buildingsSelected) || count($buildingsSelected)==0) && ($dataSend['price'] >= $currentPrice || $dataSend['price']==$dataSend['minPrice']) && ($dataSend['surface'] >= $currentSurface || $dataSend['surface']==$dataSend['minSurface'])){
+				
+			$row_class = ($count%2 == 0) ? 'pisos--list--container--body--row pair' : 'pisos--list--container--body--row odd';
+			    if(get_field('floor_reserved') == true)
+			    	$row_class = $row_class.' floor__reserved';
+
+			$html.='<div class="'.$row_class.'">	
+				<div class="pisos--list--container--body--row--cell">'. $building.'</div>
+				<div class="pisos--list--container--body--row--cell">'. get_field("parking_number").'</div>
+				<div class="pisos--list--container--body--row--cell">'. get_field("door").'</div>
+				<div class="pisos--list--container--body--row--cell">'. $bedroom.'</div>
+				<div class="pisos--list--container--body--row--cell">'. get_field("bathrooms_number").'</div>
+				<div class="pisos--list--container--body--row--cell">'. get_field("study_number").'</div>
+				<div class="pisos--list--container--body--row--cell">'. $currentSurface.'</div>
+				<div class="pisos--list--container--body--row--cell">'. get_field("m2_useful").'</div>
+				<div class="pisos--list--container--body--row--cell">'. get_field("m2_balconies").'</div>
+				<div class="pisos--list--container--body--row--cell">'. get_field("m2_terraces").'</div>
+				<div class="pisos--list--container--body--row--cell">'. get_field("m2_garden").'</div>
+				<div class="pisos--list--container--body--row--cell">'. $currentPrice.'</div>
+				<div class="pisos--list--container--body--row--cell">'. get_field("bedrooms_number").'</div>
+			</div>';
+			$count++;
+		}
+				}
+			}
+	if($html=='')
+	echo '<p class="not-results-filter">No se encontraron resultados</p>';
+	else echo $html;
+	wp_die();
 	//wp_send_json( array('building' => $buiding ));
-	echo json_encode($buiding);
+	
 }
 
 
