@@ -218,14 +218,20 @@ function my_login_redirect($redirect_to, $requested_redirect_to, $user) {
     }
 }
 
+//filtro y shortcode de pagina de pisos
+
+
 add_shortcode( 'pisos_page_filter', 'pisos_page_filter_result' );
-
 function pisos_page_filter_result($atts){
-
+	$lenght=wp_count_posts('floor')->publish;
+	$itemsPagination=10;
+	$countItemPagination=$itemsPagination;
+	$countPaginationClasses=1;
 	$args = array(
-		   		'post_type' => 'floor',                
-		   		'post_status' => 'publish',
-		   	);
+		'post_type' => 'floor',                
+		'post_status' => 'publish',
+		'posts_per_page' => -1
+	);
 	if($atts && (isset($atts['bedrooms']) || isset($atts['surface']) || isset($atts['price']) )){		
 		$meta_query = [];		
 		if( isset($atts['bedrooms']) ){ 
@@ -256,49 +262,214 @@ function pisos_page_filter_result($atts){
 	if ( $query->have_posts() ): ?>
 	 <?php $count=1; ?>
 	 <?php ob_start(); ?>	  	
-	<?php	while ( $query->have_posts() ): $query->the_post();
-				$terms = array();
-				foreach (get_the_terms( get_the_ID(), 'building' ) as $term) {
-					array_push($terms, $term->name);
-				}
-			    if( !isset($atts['buildings']) || ( isset($atts['buildings']) && in_array($atts['buildings'], $terms) ) ): ?>
-			    	<?php $row_class = ($count%2 == 0) ? 'pisos--list--container--body--row pair' : 'pisos--list--container--body--row odd'; ?>
-			    	<?php 
-			    		  if(get_field('floor_reserved') == true):
-			    		    $row_class = $row_class.' floor__reserved';
-			    	 	  endif; 
-			    	 ?>
-			        <div class="<?php echo $row_class; ?>">
-			         <?php $building_to_show = sizeof( get_the_terms( get_the_ID(), 'building' ) ) > 0 ? get_the_terms( get_the_ID(), 'building' )[0]->name : ''; ?>   		
-					  <div class="pisos--list--container--body--row--cell"><?php echo $building_to_show; ?> </div>
-					  <div class="pisos--list--container--body--row--cell"><?php echo get_field('parking_number'); ?> </div>
-					  <div class="pisos--list--container--body--row--cell"><?php echo get_field('door'); ?> </div>
-					  <div class="pisos--list--container--body--row--cell"><?php echo get_field('bedrooms_number'); ?> </div>
-					  <div class="pisos--list--container--body--row--cell"><?php echo get_field('bathrooms_number'); ?> </div>
-					  <div class="pisos--list--container--body--row--cell"><?php echo get_field('study_number'); ?> </div>
-					  <div class="pisos--list--container--body--row--cell"><?php echo get_field('m2_builded'); ?> </div>
-					  <div class="pisos--list--container--body--row--cell"><?php echo get_field('m2_useful'); ?> </div>
-					  <div class="pisos--list--container--body--row--cell"><?php echo get_field('m2_balconies'); ?> </div>
-					  <div class="pisos--list--container--body--row--cell"><?php echo get_field('m2_terraces'); ?> </div>
-					  <div class="pisos--list--container--body--row--cell"><?php echo get_field('m2_garden'); ?> </div>
-					  <div class="pisos--list--container--body--row--cell"><?php echo get_field('floor_price'); ?> </div>
-					  <div class="pisos--list--container--body--row--cell"><a href="<?php echo get_field('floor_plane'); ?>"><img src="<?php echo wp_get_upload_dir()['url'].'/file-download-1.svg'; ?>"></a></div>
-				    </div>
-		  <?php $count++; endif;
+	<?php while ( $query->have_posts() ): $query->the_post();
+		$terms = array();
+		foreach (get_the_terms( get_the_ID(), 'building' ) as $term) {
+			array_push($terms, $term->name);
+		}
+		if( !isset($atts['buildings']) || ( isset($atts['buildings']) && in_array($atts['buildings'], $terms) ) ): ?>
+			<?php $row_class = ($count%2 == 0) ? 'pisos--list--container--body--row pair' : 'pisos--list--container--body--row odd'; ?>
+			<?php 
+			if(get_field('floor_reserved') == true):
+				$row_class = $row_class.' floor__reserved';
+			endif; 
+			if($lenght/$itemsPagination>1){
+				if($count<=$countItemPagination)
+					$row_class .= ' floor-pagination floor-pagination-'.$countPaginationClasses;
+				else
+					{
+					$countPaginationClasses++;
+					$row_class .= ' floor-pagination floor-pagination-'.$countPaginationClasses;	
+					$countItemPagination+=$itemsPagination;
+					}
+			}
+			    ?>
+			<div class="<?php echo $row_class; ?>">
+			    <?php $building_to_show = sizeof( get_the_terms( get_the_ID(), 'building' ) ) > 0 ? get_the_terms( get_the_ID(), 'building' )[0]->name : ''; ?>   		
+				<div class="pisos--list--container--body--row--cell"><?php echo $building_to_show; ?> </div>
+				<div class="pisos--list--container--body--row--cell"><?php echo get_field('parking_number'); ?> </div>
+				<div class="pisos--list--container--body--row--cell"><?php echo get_field('door'); ?> </div>
+				<div class="pisos--list--container--body--row--cell"><?php echo get_field('bedrooms_number'); ?> </div>
+				<div class="pisos--list--container--body--row--cell"><?php echo get_field('bathrooms_number'); ?> </div>
+				<div class="pisos--list--container--body--row--cell"><?php echo get_field('study_number'); ?> </div>
+				<div class="pisos--list--container--body--row--cell"><?php echo get_field('m2_builded'); ?> </div>
+				<div class="pisos--list--container--body--row--cell"><?php echo get_field('m2_useful'); ?> </div>
+				<div class="pisos--list--container--body--row--cell"><?php echo get_field('m2_balconies'); ?> </div>
+				<div class="pisos--list--container--body--row--cell"><?php echo get_field('m2_terraces'); ?> </div>
+				<div class="pisos--list--container--body--row--cell"><?php echo get_field('m2_garden'); ?> </div>
+				<div class="pisos--list--container--body--row--cell"><?php echo get_field('floor_price'); ?> </div>
+				<div class="pisos--list--container--body--row--cell"><a href="<?php echo get_field('floor_plane'); ?>" download><img src="<?php echo wp_get_upload_dir()['url'].'/file-download-1.svg'; ?>"></a></div>
+			</div>
+		  <?php $count++; 
+		endif;
 		endwhile; 
-		wp_reset_postdata(); ?>
-	  <?php	
-	endif;	
+		if($lenght/$itemsPagination>1){
+			$lenghtArray=intdiv($lenght,$itemsPagination);
+		?>
+		<div class="floor-pagination-wrapper">
+			<button class="prev-button"><</button>
+			<?php 
+			if($lenght%$itemsPagination!=0)
+			   $lenghtArray++;
+				for($i=1;$i<=$lenghtArray;$i++){ ?>
+				<button class="pagination-button pagination-button-<?php echo $i?>"><?php echo $i; ?></button>
+			<?php } ?>
+			<button class="next-button">></button>
+		</div>
+		<?php
+		} 
+		wp_reset_postdata();
 
-	return ob_get_clean();
+endif;	
+return ob_get_clean();
+} 
+
+add_action('wp_ajax_nopriv_quorania_filter', 'quorania_pisos_filter');
+add_action('wp_ajax_quorania_filter', 'quorania_pisos_filter');
+function quorania_pisos_filter(){
+	$dataSend= $_POST['dataSend'];
+	$bedroomsSelected=array();
+	$buildingsSelected=array();
+	$price=array();
+	$surface=array();
+
+	$itemsPagination=10;
+	$countItemPagination=$itemsPagination;
+	$countPaginationClasses=1;
+
+	if($dataSend['bedrooms']){
+		$bedroomsSelected=(count($dataSend['bedrooms'])>0)? 
+		array(
+			'key'=>"bedrooms_number",
+			'value'=>$dataSend['bedrooms'],
+			'compare'=>'in'
+		)	
+		:
+		array();
+	}
+	if($dataSend['buildings']){
+		$buildingsSelected=(count($dataSend['buildings'])>0)? 
+		array(array(
+			'taxonomy'=>"building",
+			'field'=>'slug',
+			'terms'    => $dataSend['buildings'],
+			'operator' => 'IN',
+		))	
+		:
+		array();
+	}
+	if($dataSend['price']){
+		$price=($dataSend['price']!=$dataSend['minPrice'])? 
+		array(
+			'key'=>"floor_price",
+			'value'=>$dataSend['price'],
+			'compare'=>'<=',
+			'type'=>'numeric'
+		)	
+		:
+		array();
+	}
+	if($dataSend['surface']){
+		$surface=($dataSend['surface']!=$dataSend['minSurface'])? 
+		array(
+			'key'=>"m2_builded",
+			'value'=>$dataSend['surface'],
+			'compare'=>'<=',
+			'type'=>'numeric'
+		)	
+		:
+		array();
+	}
+	$args = array();
+	if(count($buildingsSelected)==0 && count($bedroomsSelected)==0 && $dataSend['price']==$dataSend['minPrice'] && $dataSend['surface']==$dataSend['minSurface']){
+		$args = array(
+			'post_type' => 'floor',                
+			'post_status' => 'publish',
+			'posts_per_page' => -1
+		);	
+	}else {
+		$args = array(
+			'post_type' => 'floor',                
+			'post_status' => 'publish',
+			'posts_per_page' => -1,
+			'meta_query'=>array(
+				$price,
+				$bedroomsSelected,
+				$surface
+			),
+			'tax_query'=>$buildingsSelected
+		);	
+	}	
+	$query = new WP_Query($args);
+	if ( $query->have_posts() ){
+		$count=1;
+		while ( $query->have_posts() ){
+			$query->the_post();
+			$length=$query->found_posts;
+			$row_class = ($count%2 == 0) ? 'pisos--list--container--body--row pair' : 'pisos--list--container--body--row odd';
+			if(get_field('floor_reserved') == true)
+			$row_class = $row_class.' floor__reserved';
+			
+			if($length/$itemsPagination>1){
+				if($count<=$countItemPagination){
+					$row_class .= ' floor-pagination floor-pagination-'.$countPaginationClasses;
+				}else
+				{
+				$countPaginationClasses++;
+				$row_class .= ' floor-pagination floor-pagination-'.$countPaginationClasses;	
+				$countItemPagination+=$itemsPagination;
+				}
+			}
+
+			$building_to_show = sizeof( get_the_terms( get_the_ID(), 'building' ) ) > 0 ? get_the_terms( get_the_ID(), 'building' )[0]->name : '';
+			$html.=$aux.'<div class="'.$row_class.'">	
+				<div class="pisos--list--container--body--row--cell">'. $building_to_show .'</div>
+				<div class="pisos--list--container--body--row--cell">'. get_field("parking_number").'</div>
+				<div class="pisos--list--container--body--row--cell">'. get_field("door").'</div>
+				<div class="pisos--list--container--body--row--cell">'. get_field('bedrooms_number').'</div>
+				<div class="pisos--list--container--body--row--cell">'. get_field("bathrooms_number").'</div>
+				<div class="pisos--list--container--body--row--cell">'. get_field("study_number").'</div>
+				<div class="pisos--list--container--body--row--cell">'. get_field('m2_builded').'</div>
+				<div class="pisos--list--container--body--row--cell">'. get_field("m2_useful").'</div>
+				<div class="pisos--list--container--body--row--cell">'. get_field("m2_balconies").'</div>
+				<div class="pisos--list--container--body--row--cell">'. get_field("m2_terraces").'</div>
+				<div class="pisos--list--container--body--row--cell">'. get_field("m2_garden").'</div>
+				<div class="pisos--list--container--body--row--cell">'. get_field('floor_price').'</div>
+				<div class="pisos--list--container--body--row--cell"><a href="'.get_field('floor_plane').'"download><img src="'.wp_get_upload_dir()["url"].'/file-download-1.svg"/></a></div></div>';
+				$count++;
+			}
+				if($length/$itemsPagination>1){
+				$lenghtArray=intdiv($length,$itemsPagination);
+				$html.='<div class="floor-pagination-wrapper">
+					<button class="prev-button"><</button>';
+				if($length%$itemsPagination!=0){
+			  		$lenghtArray++;
+				}
+				for($i=1;$i<=$lenghtArray;$i++){
+					$html.='<button class="pagination-button pagination-button-'.$i.'">'.$i.'</button>';
+				}
+				$html.='<button class="next-button">></button></div>';
+				}
+			
+		echo $html;
+	
+	} else
+	echo '<p class="not-results-filter">No se encontraron resultados</p>';
+	wp_die();
 }
+
+//filtro y shortcode de pagina de trasteros o parqueos
 
 add_shortcode( 'parking_page_filter', 'parking_page_filter_result' );
 function parking_page_filter_result($atts){
-
+	$lenght=wp_count_posts('parking_boxroom')->publish;
+	$itemsPagination=10;
+	$countItemPagination=$itemsPagination;
+	$countPaginationClasses=1;
 	$args = array(
 		   		'post_type' => 'parking_boxroom',                
 		   		'post_status' => 'publish',
+				'posts_per_page' => -1
 		   	);
 	$query = new WP_Query($args);
 
@@ -315,7 +486,18 @@ function parking_page_filter_result($atts){
 			    		  if(get_field('parking_reserved') == true):
 			    		    $row_class = $row_class.'parking_reserved';
 			    	 	  endif; 
-			    	 ?>
+					
+						if($lenght/$itemsPagination>1){
+							if($count<=$countItemPagination)
+								$row_class .= ' floor-pagination floor-pagination-'.$countPaginationClasses;
+							else
+								{
+								$countPaginationClasses++;
+								$row_class .= ' floor-pagination floor-pagination-'.$countPaginationClasses;	
+								$countItemPagination+=$itemsPagination;
+								}
+						}
+					 ?>
 			        <div class="<?php echo $row_class; ?> row-parking">
 			         	<?php $building_to_show = sizeof( get_the_terms( get_the_ID(), 'building' ) ) > 0 ? get_the_terms( get_the_ID(), 'building' )[0]->name : ''; ?>   		
 					 	<div class="pisos--list--container--body--row--cell"><?php echo get_the_title(); ?> </div>  
@@ -323,98 +505,161 @@ function parking_page_filter_result($atts){
 						<div class="pisos--list--container--body--row--cell"><?php echo $building_to_show; ?> </div>
 					  	<div class="pisos--list--container--body--row--cell"><?php echo get_field('parking_price'); ?> </div>
 					  	<div class="pisos--list--container--body--row--cell"><?php echo get_field('escalera'); ?> </div>
-					  	<div class="pisos--list--container--body--row--cell"><a href="<?php echo get_field('parking_plane'); ?>"><img src="<?php echo wp_get_upload_dir()['url'].'/file-download-1.svg'; ?>"></a></div>
+					  	<div class="pisos--list--container--body--row--cell"><a href="<?php echo get_field('parking_plane'); ?>" download><img src="<?php echo wp_get_upload_dir()['url'].'/file-download-1.svg'; ?>"></a></div>
 				    </div>
 		  <?php $count++; endif;
 		endwhile; 
+		if($lenght/$itemsPagination>1){
+			$lenghtArray=intdiv($lenght,$itemsPagination);
+		?>
+		<div class="floor-pagination-wrapper">
+			<button class="prev-button"><</button>
+			<?php 
+			if($lenght%$itemsPagination!=0)
+			   $lenghtArray++;
+				for($i=1;$i<=$lenghtArray;$i++){ ?>
+				<button class="pagination-button pagination-button-<?php echo $i?>"><?php echo $i; ?></button>
+			<?php } ?>
+			<button class="next-button">></button>
+		</div>
+		<?php
+		} 
 		wp_reset_postdata(); ?>
 	  <?php	
 	endif;	
 
 	return ob_get_clean();
 }
-add_action('wp_ajax_nopriv_quorania_filter', 'quorania_pisos_filter');
-add_action('wp_ajax_quorania_filter', 'quorania_pisos_filter');
+add_action('wp_ajax_nopriv_quorania_filter_parking', 'quorania_pisos_filter_parking');
+add_action('wp_ajax_quorania_filter_parking', 'quorania_pisos_filter_parking');
 
-
-function quorania_pisos_filter(){
-	$args = array(
-		'post_type' => 'floor',                
-		'post_status' => 'publish',
-	);
-	$query = new WP_Query($args);
-	$html='';
-	$buildingsSelected=[];
-	$bedroomsSelected=[];
+function quorania_pisos_filter_parking(){
 	$dataSend= $_POST['dataSend'];
+	$buildingsSelected=array();
+	$price=array();
+	$tipoSelected=array();
+	$tipoOpcion1=array();
+	$tipoOpcion2=array();
+	$html='';
 
-	if($dataSend['buildings'])
-		$buildingsSelected=$dataSend['buildings'];
-	if($dataSend['bedrooms'])
-		$bedroomsSelected=$dataSend['bedrooms'];
+	$itemsPagination=10;
+	$countItemPagination=$itemsPagination;
+	$countPaginationClasses=1;
 
+
+	 if($dataSend['buildings']){
+		$buildingsSelected=(count($dataSend['buildings'])>0)? 
+		array(
+			array(
+			'taxonomy'=>"building",
+			'field'=>'slug',
+			'terms'    => $dataSend['buildings'],
+			'operator' => 'IN',
+		))	
+		:
+		array();
+	}
+	
+	if($dataSend['price']){
+		$price=($dataSend['price']!=$dataSend['minPrice'])? 
+		array(
+			'key'=>"parking_price",
+			'value'=>$dataSend['price'],
+			'compare'=>'<=',
+			'type'=>'numeric'
+		)	
+		:
+		array();
+	}
+	
+	if($dataSend['tipo']){
+		$tipoSelected=count($dataSend['tipo']);
+		if($tipoSelected>0){
+			$tipoOpcion1 = array(
+				'key'=>'tipo',
+				'value'=>$dataSend['tipo'][0],
+				'compare'=>'LIKE'
+			);
+			if($tipoSelected>1)
+			$tipoOpcion2 = array(
+				'key'=>'tipo',
+				'value'=>$dataSend['tipo'][1],
+				'compare'=>'LIKE'
+			);
+		}
+	}
+
+	$args = array();
+	if(count($buildingsSelected)==0 && $tipoSelected==0 && $dataSend['price']==$dataSend['minPrice']){
+		$args = array(
+			'post_type' => 'parking_boxroom',                
+			'post_status' => 'publish',
+			'posts_per_page' => -1
+		);	
+	}else {
+		$args = array(
+			'post_type' => 'parking_boxroom',                
+			'post_status' => 'publish',
+			'posts_per_page' => -1,
+			'meta_query'=>array(
+				array(
+					'relation' => 'OR',
+					$tipoOpcion1,
+					$tipoOpcion2
+				),
+				$price
+			),
+			'tax_query'=>$buildingsSelected
+		);
+	}	 
+	$query = new WP_Query($args);
 	if ( $query->have_posts() ){
-		$count=1;
-		while ( $query->have_posts() ){
+		 $count=1;
+		 while ( $query->have_posts() ){
+			$length=$query->found_posts;
 			$query->the_post();
-
 			$building=get_the_terms( get_the_ID(), 'building' )[0]->name;
-			$bedroom=get_field('bedrooms_number');
-			$currentPrice=get_field("floor_price");
-			$currentSurface=get_field("m2_builded");
-			if(count($buildingsSelected)==0 && count($bedroomsSelected)==0 && $dataSend['price']==$dataSend['minPrice'] && $dataSend['surface']==$dataSend['minSurface']){
-				$row_class = ($count%2 == 0) ? 'pisos--list--container--body--row pair' : 'pisos--list--container--body--row odd';
-			    if(get_field('floor_reserved') == true)
-			    	$row_class = $row_class.' floor__reserved';
-
-			$html.='<div class="'.$row_class.'">	
-				<div class="pisos--list--container--body--row--cell">'. $building.'</div>
-				<div class="pisos--list--container--body--row--cell">'. get_field("parking_number").'</div>
-				<div class="pisos--list--container--body--row--cell">'. get_field("door").'</div>
-				<div class="pisos--list--container--body--row--cell">'. $bedroom.'</div>
-				<div class="pisos--list--container--body--row--cell">'. get_field("bathrooms_number").'</div>
-				<div class="pisos--list--container--body--row--cell">'. get_field("study_number").'</div>
-				<div class="pisos--list--container--body--row--cell">'. $currentSurface.'</div>
-				<div class="pisos--list--container--body--row--cell">'. get_field("m2_useful").'</div>
-				<div class="pisos--list--container--body--row--cell">'. get_field("m2_balconies").'</div>
-				<div class="pisos--list--container--body--row--cell">'. get_field("m2_terraces").'</div>
-				<div class="pisos--list--container--body--row--cell">'. get_field("m2_garden").'</div>
-				<div class="pisos--list--container--body--row--cell">'. $currentPrice.'</div>
-				<div class="pisos--list--container--body--row--cell">'. get_field("bedrooms_number").'</div>
-			</div>';
-			$count++;
-		}
-		elseif((in_array($bedroom,$bedroomsSelected) || count($bedroomsSelected)==0) && (in_array($building,$buildingsSelected) || count($buildingsSelected)==0) && ($dataSend['price'] >= $currentPrice || $dataSend['price']==$dataSend['minPrice']) && ($dataSend['surface'] >= $currentSurface || $dataSend['surface']==$dataSend['minSurface'])){
-				
 			$row_class = ($count%2 == 0) ? 'pisos--list--container--body--row pair' : 'pisos--list--container--body--row odd';
-			    if(get_field('floor_reserved') == true)
-			    	$row_class = $row_class.' floor__reserved';
 
-			$html.='<div class="'.$row_class.'">	
-				<div class="pisos--list--container--body--row--cell">'. $building.'</div>
-				<div class="pisos--list--container--body--row--cell">'. get_field("parking_number").'</div>
-				<div class="pisos--list--container--body--row--cell">'. get_field("door").'</div>
-				<div class="pisos--list--container--body--row--cell">'. $bedroom.'</div>
-				<div class="pisos--list--container--body--row--cell">'. get_field("bathrooms_number").'</div>
-				<div class="pisos--list--container--body--row--cell">'. get_field("study_number").'</div>
-				<div class="pisos--list--container--body--row--cell">'. $currentSurface.'</div>
-				<div class="pisos--list--container--body--row--cell">'. get_field("m2_useful").'</div>
-				<div class="pisos--list--container--body--row--cell">'. get_field("m2_balconies").'</div>
-				<div class="pisos--list--container--body--row--cell">'. get_field("m2_terraces").'</div>
-				<div class="pisos--list--container--body--row--cell">'. get_field("m2_garden").'</div>
-				<div class="pisos--list--container--body--row--cell">'. $currentPrice.'</div>
-				<div class="pisos--list--container--body--row--cell">'. get_field("bedrooms_number").'</div>
-			</div>';
-			$count++;
-		}
+			if($length/$itemsPagination>1){
+				if($count<=$countItemPagination){
+					$row_class .= ' floor-pagination floor-pagination-'.$countPaginationClasses;
+				}else
+				{
+				$countPaginationClasses++;
+				$row_class .= ' floor-pagination floor-pagination-'.$countPaginationClasses;	
+				$countItemPagination+=$itemsPagination;
 				}
 			}
-	if($html=='')
-	echo '<p class="not-results-filter">No se encontraron resultados</p>';
-	else echo $html;
-	wp_die();
-	//wp_send_json( array('building' => $buiding ));
-	
+
+			if(get_field('parking_reserved') == true)
+			    $row_class = $row_class.' floor__reserved';
+				$html.='<div class="'.$row_class.' row-parking">	
+				<div class="pisos--list--container--body--row--cell">'. get_the_title().'</div>
+				<div class="pisos--list--container--body--row--cell">'. get_field('floor_number').'</div>
+				<div class="pisos--list--container--body--row--cell">'. $building.'</div>
+				<div class="pisos--list--container--body--row--cell">'. get_field('parking_price').'</div>
+				<div class="pisos--list--container--body--row--cell">'. get_field('escalera').'</div>
+				<div class="pisos--list--container--body--row--cell"><a href="'.get_field('parking_plane').'" download><img src="'.wp_get_upload_dir()['url'].'/file-download-1.svg"/></a></div></div>';
+			$count++;
+		} 
+		if($length/$itemsPagination>1){
+			$lenghtArray=intdiv($length,$itemsPagination);
+			$html.='<div class="floor-pagination-wrapper">
+				<button class="prev-button"><</button>';
+			if($length%$itemsPagination!=0){
+				  $lenghtArray++;
+			}
+			for($i=1;$i<=$lenghtArray;$i++){
+				$html.='<button class="pagination-button pagination-button-'.$i.'">'.$i.'</button>';
+			}
+			$html.='<button class="next-button">></button></div>';
+			}
+			echo $html;
+	}else 
+		echo '<p class="not-results-filter">No se encontraron resultados</p>';
+
+		wp_die();	
 }
 
 

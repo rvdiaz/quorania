@@ -11,7 +11,7 @@ $query = new WP_Query($args);
 if ( $query->have_posts() ): 
     $buildings = $bedrooms = $surface = $price = array();	 
     $maxsurface=$maxprice=0;	
-    $minsurface=$minprice=100000;
+    $minsurface=$minprice=10000;
       while ( $query->have_posts() ): $query->the_post();
             if(get_the_terms( get_the_ID(), 'building' ))
            $buildings = array_merge($buildings, get_the_terms( get_the_ID(), 'building' ));
@@ -89,7 +89,7 @@ if ( $query->have_posts() ):
                         </div>
                     </div>						
                 </div>
-            <div class="pisos--filters--container--button"><button class="restore-filters-button"><span>X</span> Restaurar Filtros</button></div>
+            <div class="pisos--filters--container--button"><button class="restore-filters-button restore-filters-button-pisos"><span>X</span> Restaurar Filtros</button></div>
         </div>					
     </section>
     <section class="pisos--list" id="pisos_list">

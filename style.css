@@ -481,6 +481,37 @@ p {
       column-gap: 5px; }
       .entry-content .promocion--pastilla--dossier:hover {
         cursor: pointer; }
+.entry-content .pisos .floor-pagination {
+  display: none; }
+.entry-content .pisos .pagination-active {
+  display: grid; }
+.entry-content .pisos .floor-pagination-wrapper {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  margin-top: 35px; }
+.entry-content .pisos .floor-pagination-wrapper button {
+  margin: 0 10px;
+  width: 32px;
+  height: 32px;
+  background-color: transparent;
+  color: #D9D9D9;
+  border: 1px solid #D9D9D9;
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer; }
+.entry-content .pisos .floor-pagination-wrapper .active {
+  background-color: #A9D52F;
+  color: #fff;
+  border: none; }
+.entry-content .pisos .floor-pagination-wrapper .prev-button,
+.entry-content .pisos .floor-pagination-wrapper .next-button {
+  border-color: #000;
+  color: #000; }
+.entry-content .pisos .floor-pagination-wrapper button:disabled {
+  background-color: #000;
+  color: #fff;
+  cursor: unset; }
 .entry-content .pisos--filters {
   display: flex;
   align-items: center;
@@ -507,8 +538,7 @@ p {
     .entry-content .pisos--filters--container--items {
       display: flex;
       justify-content: center;
-      align-content: center;
-      column-gap: 45px; }
+      align-content: center; }
       .entry-content .pisos--filters--container--items--item {
         display: flex;
         align-items: flex-start;
@@ -601,7 +631,7 @@ p {
       font-size: 12px;
       line-height: 15px;
       text-transform: uppercase; }
-    .entry-content .pisos--filters--container .restore-filers-button span {
+    .entry-content .pisos--filters--container .restore-filters-button span {
       color: #A9D52F;
       font-size: 14px; }
 .entry-content .pisos--list {
@@ -820,5 +850,51 @@ p {
 
 .parking-traseros .row-parking {
   grid-template-columns: repeat(6, 1fr) !important; }
+
+#price-range-data-parking-out {
+  position: absolute;
+  left: 30%;
+  background-image: url(http://microsite.informagedevelop.com/wp-content/uploads/2022/10/Rectangle-10.png);
+  background-size: 100% 100%;
+  height: 30px;
+  min-width: 50px;
+  background-repeat: no-repeat;
+  top: -38px;
+  color: #000;
+  text-align: center;
+  display: none;
+  padding-top: 5px; }
+
+.parking-traseros .checkbutton-wrapper {
+  display: flex;
+  margin-right: 67px; }
+
+.parking-traseros .check-group {
+  margin: 0 16px;
+  display: flex;
+  align-items: center; }
+
+.parking-traseros .check-group label {
+  font-size: 12px;
+  line-height: 15px;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-left: 3px; }
+
+.parking-traseros .check-group input[type="checkbox"] {
+  appearance: none;
+  background-color: #fff;
+  margin: 0;
+  font: inherit;
+  color: currentColor;
+  width: 14px;
+  height: 14px;
+  border: 1px solid #A9D52F; }
+
+.parking-traseros .check-group input[type="checkbox"]:checked {
+  background-image: url("http://localhost/quorania/wp-content/uploads/2022/10/x_icon_150997.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  padding: 2px; }
 
 /*# sourceMappingURL=style.css.map */

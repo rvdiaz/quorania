@@ -48,8 +48,7 @@
 
 <?php include('templates/pisos.php'); ?>
 
-
-<!------------- Aparcamientos y Trasteros  --------------------------->
+<!------------- Aparcamientos y trasteros  --------------------------->
 
 <?php include('templates/parking-trasteros.php'); ?>
 	

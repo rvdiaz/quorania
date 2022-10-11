@@ -16,7 +16,7 @@ if ( $query->have_posts() ):
             if(get_the_terms( get_the_ID(), 'building' ))
            $buildings = array_merge($buildings, get_the_terms( get_the_ID(), 'building' ));
            $price[ get_field('parking_price',get_the_ID()) ] = get_field('parking_price',get_the_ID());  
-           $priceCurrent = get_field('floor_price',get_the_ID());
+           $priceCurrent = get_field('parking_price',get_the_ID());
             if($priceCurrent<$minprice)
                 $minprice=$priceCurrent;
 
@@ -39,18 +39,26 @@ if ( $query->have_posts() ):
                     <div class="pisos--filters--container--items--item">
                         <?php if( sizeof($buildings)>0 ): ?>
                             <div class="pisos--filters--container--items--item--heading"><?php _e('Edificios','quorania-microsite'); ?></div>
-                            <div class="pisos--filters--container--items--item--content pisos--filters--container--items--item--content-parking">
+                            <div class="pisos--filters--container--items--item--content pisos--filters--container--items--item--content--parking-buildings">
                                 <?php 
                                     foreach($buildings as $b): ?>
-                                        <span onclick="SelectFilter(event)" class="" data-building="<?php echo$b; ?>"><?php echo $b; ?></span>
+                                        <span onclick="SelectFilterParking(event)" class="" data-building="<?php echo$b; ?>"><?php echo $b; ?></span>
                                 <?php endforeach; ?>
                             </div>
                         <?php endif; ?>
                     </div>
                     <div class="pisos--filters--container--items--item">
-                       
-                    </div>
-                   					
+                       <div class="checkbutton-wrapper">
+                            <div class="check-group">
+                                <input onclick="doFiltersParking()" type="checkbox" id="parqueo-check" name="parqueo" value="parqueo">
+                                <label for="parqueo-check">Parqueo</label>
+                            </div>
+                            <div class="check-group">
+                                <input onclick="doFiltersParking()" type="checkbox" id="trastero-check" name="trastero" value="trastero">
+                                <label for="trastero-check">Trastero</label>
+                            </div>
+                       </div>
+                    </div>	
                     <div class="pisos--filters--container--items--item">
                         <div class="pisos--filters--container--items--item--heading"><?php _e('Precio','quorania-microsite'); ?></div>
                         <div class="pisos--filters--container--items--item--content">
@@ -61,7 +69,7 @@ if ( $query->have_posts() ):
                         </div>
                     </div>						
                 </div>
-            <div class="pisos--filters--container--button"><button class="restore-filters-button"><span>X</span> Restaurar Filtros</button></div>
+            <div class="pisos--filters--container--button"><button class="restore-filters-button restore-filters-button-parking"><span>X</span> Restaurar Filtros</button></div>
         </div>					
     </section>
     <section class="pisos--list" id="pisos_list">
