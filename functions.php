@@ -125,15 +125,21 @@ add_action( 'widgets_init', 'quorania_microsite_widgets_init' );
 /**
  * Enqueue scripts and styles.
  */
-function quorania_microsite_scripts() {
-	wp_enqueue_style( 'quorania-microsite-style', get_stylesheet_uri(), array(), _S_VERSION );
-	wp_style_add_data( 'quorania-microsite-style', 'rtl', 'replace' );
+function quorania_microsite_scripts() {	
+	wp_enqueue_style( 'quorania-microsite-style', get_stylesheet_uri(), array(), _S_VERSION );	
+	wp_style_add_data( 'quorania-microsite-style', 'rtl', 'replace' );	
+	wp_enqueue_style( 'lightbox-css', get_template_directory_uri() . '/assets/lightbox/css/lightbox.min.css', array(), _S_VERSION);
+	wp_enqueue_style( 'videobox-css', get_template_directory_uri() . '/assets/rbox/jquery-rbox.css', array(), _S_VERSION);
+	
 
 	wp_enqueue_script( 'quorania-microsite-navigation', get_template_directory_uri() . '/js/navigation.js', array(), _S_VERSION, true );
 	wp_enqueue_script( 'quorania-microsite-script', get_template_directory_uri() . '/js/user-administration.js', array('jquery'), _S_VERSION, true );
 	wp_enqueue_script( 'quorania-microsite-script-map', get_template_directory_uri() . '/js/map.js', array('jquery'), _S_VERSION, true );
 	wp_enqueue_script( 'quorania-microsite-script-pisos-filter', get_template_directory_uri() . '/js/pisos-filter.js', array('jquery'), _S_VERSION, true );
 	wp_enqueue_script( 'quorania-microsite-script-parking-filter', get_template_directory_uri() . '/js/parking-filter.js', array('jquery'), _S_VERSION, true );
+
+	wp_enqueue_script( 'lightbox-js', get_template_directory_uri() . '/assets/lightbox/js/lightbox.min.js', array('jquery'), _S_VERSION, true );
+	wp_enqueue_script( 'videobox-js', get_template_directory_uri() . '/assets/rbox/jquery-rbox.js', array('jquery'), _S_VERSION, true );
 
 	wp_localize_script( 'quorania-microsite-script', 'ajax', array( 'url' => admin_url( 'admin-ajax.php' ) ) );
 	wp_localize_script( 'quorania-microsite-script-map', 'ajax', array( 'url' => admin_url( 'admin-ajax.php' ) ) );
@@ -145,7 +151,17 @@ function quorania_microsite_scripts() {
 	}
 }
 
-
+if( function_exists('acf_add_options_page') ) {
+	
+	acf_add_options_page(array(
+		'page_title' 	=> 'Ubicaciones y Entornos',
+		'menu_title'	=> 'Ubicaciones y Entornos',
+		'menu_slug' 	=> 'theme-general-settings',
+		'capability'	=> 'edit_posts',
+		'icon_url' => 'dashicons-admin-site',
+		'redirect'		=> false
+	));
+}
 
 add_action( 'wp_enqueue_scripts', 'quorania_microsite_scripts' );
 
@@ -652,6 +668,63 @@ function quorania_pisos_filter_parking(){
 		wp_die();	
 }
 
+//unzip html files before ACF UPLOAD FILE
+function pre_save_post( $post_id ) {
 
+    // vars
+    $title = $post_id; // $_POST['fields']['field_5b334ccda54b8'];
+    $group_tour_virtual = get_field('group_tour_virtual', $post_id);
+	$group_tour_virtual_tour = $group_tour_virtual["group_tour_virtual_tour"];
+	$count = 0;
+	foreach( $group_tour_virtual_tour as $tour ) {
+		if ($count > 0) {
+			break;
+		}
+		$count++;
+		$attachment_id = $tour['group_tour_virtual_tour_file']['url'];
+	}
+	
+    // $file_name_without_zip = preg_replace('/.zip$/', '', $file_name);
+    // $timestamp = time();
 
+    // echo ('<pre>');
+    // print_r($attachment_id);
+    // echo ('</pre>');
+    
+    if( $post_id && $attachment_id ) {  //what should go here?
+        require_once(ABSPATH .'/wp-admin/includes/file.php');
+        WP_Filesystem();
+		//global $wp_filesystem;
+        $destination = wp_upload_dir();
 
+        // CREAMOS LA CARPETA CON EL POST-ID SI NO EXISTE
+        $save_folder = $title;		
+        if (!file_exists( $destination['basedir'] . '/tour-virtual/'. $save_folder )) {            
+			//$wp_filesystem->rmdir($destination['basedir'] . '/tour-virtual/'.$save_folder, true);
+			wp_mkdir_p( $destination['basedir'] . '/tour-virtual/'.$save_folder, 0777);
+        }
+        
+        // RUTAS
+        $uploads_path = $destination['path'];
+        $destination_path = $destination['basedir'] . '/tour-virtual/' . $save_folder . '/';
+        $zip_file = $uploads_path .'/'. $tour['group_tour_virtual_tour_file']['filename'];
+
+		error_log("SIIII".$zip_file );
+		error_log("SIIII".$destination_path );
+
+        // UNZIP FILE
+        $unzipfile = unzip_file( $zip_file, $destination_path);
+
+        // echo 'destination: '.$destination;
+        // echo 'uploads_path: '.$uploads_path;
+        // echo 'destination_path: '.$destination_path;
+        // echo 'filename: '.$attachment_id['filename'];
+        // echo 'zip_file: '.$zip_file;
+        // die();
+
+    }
+
+    // return the new ID
+    return $post_id;
+}
+add_action( 'save_post', 'pre_save_post' );

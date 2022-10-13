@@ -1,4 +1,84 @@
 .entry-content{
+	.galeria {	
+		background-color: $green-dark;			
+		display: flex;
+		justify-content: center;		
+		@media( max-width: 768px){
+			flex-wrap: wrap;
+		}
+		&--background {
+			background: $green-dark url(assets/images/detalles-fondo.png) no-repeat;
+		    background-size: contain;
+		    background-position: 0 80px;
+			max-width: 1580px;
+			padding: 60px;
+		}
+		&--content {			
+		    max-width: 1440px;			
+			&--title {				
+				display: flex;
+				align-items: center;
+				width: 100%;
+				margin-top: 50px;				
+				div {					
+					margin-left: auto;
+					margin-right: auto;	
+					img {
+						width: 230px;
+						height: 80px;
+					}				
+				}
+			}
+			&--groups {				
+				display: flex;
+				flex-wrap: wrap;
+				gap: 10px;
+				width: 100%;
+				min-height: auto;
+				overflow: hidden;
+				margin: 50px 0;
+				justify-content: center;				
+				@media( max-width: 680px){
+					margin: 50px 0;;
+				}
+				&--box {
+					position: relative;
+					margin: 10px;
+					//padding: 10px;
+					color: white;
+					text-align: center;
+					img {
+						width:100%;
+										
+					}
+					&--contact {
+						position: absolute;
+						top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+						a {
+							font-family: 'Century Gothic';
+                            font-style: normal;
+                            font-weight: 700;
+                            font-size: 16px;
+                            line-height: 20px;
+                            text-align: center;
+                            color: #FFFFFF;
+							text-transform: uppercase;
+							text-decoration: none;							
+						}
+						.group-photo {
+							display: none;							
+						}
+						
+					}
+					&.text {
+						position: absolute;
+					}
+				}
+			}
+		}		
+	}
 	.promocion{
 		position: relative;
 		min-height: calc( 100vh + 160px);
@@ -104,44 +184,6 @@
 		}
 	}
 	.pisos{
-		.floor-pagination {
-			display: none;
-		}
-		.pagination-active {
-			display: grid;
-		}
-		.floor-pagination-wrapper {
-			display: flex;
-			width: 100%;
-			justify-content: center;
-			margin-top: 35px;
-		}
-		.floor-pagination-wrapper button {
-			margin: 0 10px;
-			width: 32px;
-			height: 32px;
-			background-color: transparent;
-			color: #D9D9D9;
-			border:1px solid #D9D9D9;
-			border-radius: 4px;
-			outline: none;
-			cursor: pointer;
-		}
-		.floor-pagination-wrapper .active {
-			background-color: $green-light;
-			color: #fff;
-			border: none;
-		}
-		.floor-pagination-wrapper .prev-button,
-		.floor-pagination-wrapper .next-button {
-			border-color: #000;
-			color: #000;
-		}
-		.floor-pagination-wrapper button:disabled {
-			background-color: #000;
-			color: #fff;
-			cursor: unset;
-		}
 		&--filters{
 				display: flex;
 		    align-items: center;
@@ -162,14 +204,16 @@
 			    flex-wrap: nowrap;
 			    justify-content: space-between;
 			    align-items: center;
-			    margin: 13px auto;
+			    margin: auto;
 	    		&--logo{
 	    			margin-left: 20px;
 	    		}
 	    		&--items{
 	    			display: flex;
 	    			justify-content: center;
+	    			align-items: center;
 	    			align-content: center;
+	    			column-gap: 45px;
 	    			&--item{
 	    				display: flex;
 	    				align-items: flex-start;
@@ -184,69 +228,8 @@
 	    					column-gap: 12px;
 	    					row-gap: 9px;
 	    					flex-wrap: wrap;
-							.input-range-wrapper{
-								position: relative;
-								display: flex;
-								align-items: center;
-								margin-right: 1px solid #D9D9D9;
-								height: 10px;
-								#price-range-data-out {
-									position: absolute;
-									left: 30%;
-									background-image: url(http://microsite.informagedevelop.com/wp-content/uploads/2022/10/Rectangle-10.png);
-									background-size: 100% 100%;
-									height: 30px;
-									min-width: 50px;
-									background-repeat: no-repeat;
-									top: -38px;
-									color: #000;
-									text-align: center;
-									display: none;
-									padding-top: 5px;
-								}
-								#surface-range-data-out{
-									position: absolute;
-									left: 30%;
-									background-image: url(http://microsite.informagedevelop.com/wp-content/uploads/2022/10/Rectangle-10.png);
-									background-size: 100% 100%;
-									height: 30px;
-									min-width: 50px;
-									background-repeat: no-repeat;
-									top: -38px;
-									color: #000;
-									text-align: center;
-									display: none;
-									padding-top: 5px;
-								}
-								input[type=range]{
-									-webkit-appearance: none;
-									height: 2px;
-								}
-								input[type=range]::-webkit-slider-thumb{
-									height: 12px;
-									width: 12px;
-									border-radius: 50%;
-									background: $green-light;
-									cursor: pointer;
-									-webkit-appearance: none;
-									margin-top: -1px;
-									position: relative;
-								}
-							}
-							&-bedrooms {
-								display: grid !important;
-  								grid-template-columns: repeat(3,1fr);
-  								grid-gap: 9px !important;
-							}
-							&-buildings {
-								display: grid !important;
-  								grid-template-columns: repeat(3,1fr);
-  								grid-gap: 9px !important;
-							}
-							.select{
-								background-color: $green-light;
-							}
 	    					span{
+	    						flex-basis: 30%;
 	    						width: 26px;
 	    						height: 28px;
 	    						background-color: #d9d9d9;
@@ -254,32 +237,16 @@
 	    						align-items: center;
 							    display: flex;
 							    justify-content: center;
-								font-size: 16px;
-								line-height: 20px;
-								font-weight: 400;
-								cursor: pointer;
+	    						&.selected{
+	    							background-color: $green-light;
+	    						}
 	    					}
 	    				}
 	    			}
 	    		}
-	    		.restore-filters-button{
+	    		&--button{
 	    			margin-right: 32px;
-					height: 33px;
-					width: 144px;
-					border: 1px solid $green-light;
-					cursor: pointer;
-					background-color: transparent;
-					outline: none;
-					color: #fff;
-					font-weight: 400;
-					font-size: 12px;
-					line-height: 15px;
-					text-transform: uppercase;
 	    		}
-				.restore-filters-button span{
-					color: $green-light;
-					font-size: 14px;
-				}
     		}
 		}
 		&--list{
@@ -330,11 +297,6 @@
 					}
 				}
 			}
-		}
-		.not-results-filter {
-			margin-top: 20px;
-			font-size: 18px;
-			font-weight: 700;
 		}
 	}
 	.quorania{

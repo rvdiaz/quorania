@@ -28,6 +28,21 @@
 	</footer><!-- #colophon -->
 </div><!-- #page -->
 <script src="https://maps.googleapis.com/maps/api/js?key=<?php echo get_field('api_google_map','option')?>&callback=initMap" defer></script>
+<script>
+    jQuery(document).ready(function($) {
+		$(".rbox-iframe").rbox({
+           'type': 'iframe',
+        });
+
+		get_visit = function (vid, vurl, vurl_update){
+			$.post( vurl_update, { id: vid } )
+			.done(function( ) {
+                location.href= vurl;
+            });
+		}
+	});
+</script>	
+		
 <?php wp_footer(); ?>
 
 </body>
