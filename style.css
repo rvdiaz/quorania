@@ -892,7 +892,7 @@ p {
   border: 1px solid #A9D52F; }
 
 .parking-traseros .check-group input[type="checkbox"]:checked {
-  background-image: url("http://localhost/quorania/wp-content/uploads/2022/10/x_icon_150997.png");
+  background-image: url(http://microsite.informagedevelop.com/wp-content/uploads/2022/10/x_icon_150997.png);
   background-repeat: no-repeat;
   background-size: contain;
   padding: 2px; }

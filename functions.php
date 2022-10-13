@@ -145,17 +145,7 @@ function quorania_microsite_scripts() {
 	}
 }
 
-if( function_exists('acf_add_options_page') ) {
-	
-	acf_add_options_page(array(
-		'page_title' 	=> 'Ubicaciones y Entornos',
-		'menu_title'	=> 'Ubicaciones y Entornos',
-		'menu_slug' 	=> 'theme-general-settings',
-		'capability'	=> 'edit_posts',
-		'icon_url' => 'dashicons-admin-site',
-		'redirect'		=> false
-	));
-}
+
 
 add_action( 'wp_enqueue_scripts', 'quorania_microsite_scripts' );
 
