@@ -71,7 +71,7 @@
 				<form action="#">
 					<button class="logout_button" type="submit" name="logout">
 						<span>Hola,  <?php echo $user->user_login ?></span>
-						<img src="<?php echo wp_get_upload_dir()['baseurl'].'/2022/09/Ellipse-23.svg'; ?>"/></button>
+						<!-- <img src="<?php echo wp_get_upload_dir()['baseurl'].'/2022/09/Ellipse-23.svg'; ?>"/></button> -->
 				</form>	
 			<?php } ?>
 		</div>

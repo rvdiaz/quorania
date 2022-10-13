@@ -27,7 +27,7 @@
 		</div>  --> <!-- .site-info -->
 	</footer><!-- #colophon -->
 </div><!-- #page -->
-
+<script src="https://maps.googleapis.com/maps/api/js?key=<?php echo get_field('api_google_map','option')?>&callback=initMap" defer></script>
 <?php wp_footer(); ?>
 
 </body>
