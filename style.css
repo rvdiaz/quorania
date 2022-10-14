@@ -1220,6 +1220,15 @@ p {
   color: #000000;
 }
 .entry-content .contacto--right_content--team--data p.bold {
+
+}
+.entry-content .contacto--right_content--team--data p.bold {
+  align-items: center; }
+
+.parking-traseros .check-group label {
+  font-size: 12px;
+  line-height: 15px;
+  text-transform: uppercase;
   font-weight: 700;
 }
 .entry-content .contacto--right_content--team--data p img {
