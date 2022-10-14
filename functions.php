@@ -709,8 +709,8 @@ function pre_save_post( $post_id ) {
         $destination_path = $destination['basedir'] . '/tour-virtual/' . $save_folder . '/';
         $zip_file = $uploads_path .'/'. $tour['group_tour_virtual_tour_file']['filename'];
 
-		error_log("SIIII".$zip_file );
-		error_log("SIIII".$destination_path );
+		//error_log("SIIII".$zip_file );
+		//error_log("SIIII".$destination_path );
 
         // UNZIP FILE
         $unzipfile = unzip_file( $zip_file, $destination_path);
